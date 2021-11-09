@@ -4,6 +4,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import exceptions
 
 class UserTokenObtainPairSerializer(TokenObtainPairSerializer):
+    
     def validate(self, attrs):
         data = super().validate(attrs)
         if self.user.is_active == True:
