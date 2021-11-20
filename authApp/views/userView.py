@@ -23,8 +23,8 @@ class UserView(views.APIView):
         return instance
     
     #Returns the data of the user specified by id
-    def get(self,request):
-        instance = self.get_instance(request.data)
+    def get(self,request, *args, **kwargs):
+        instance = self.get_instance(kwargs)
         if len(instance) == 0:
             return Response({'message': 'user not found'}, status = status.HTTP_404_NOT_FOUND)
         instance_serializer = self.serializer(instance[0])
@@ -61,7 +61,7 @@ class UserView(views.APIView):
     
     #Delete user data
     def delete(self, request, *args, **kwargs):
-        instance = self.get_instance(request.data)
+        instance = self.get_instance(kwargs)
         if len(instance)== 0:
             return Response({'message': 'user not found'}, status = status.HTTP_405_METHOD_NOT_ALLOWED)
         instance.delete()
