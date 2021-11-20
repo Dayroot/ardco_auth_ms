@@ -122,7 +122,8 @@ The functionalities of the REST API are described below.
     Connection: close
     Content-Type: application/json
     Content-Length: 205
-	{
+	{error: "", 
+	"result":
 		"id": 1,
 		"username": "pepito",
 		"fullname": "fulanito",
@@ -154,7 +155,7 @@ The functionalities of the REST API are described below.
     Content-Type: application/json
     Content-Length: 31
 
-    {"message": "successful update"}
+    {error: "", "result": "successful update"}
 
 ## Delete user data
 
@@ -173,4 +174,4 @@ The functionalities of the REST API are described below.
     Content-Type: application/json
     Content-Length: 33
 
-    {"message": "successful deletion"}
+    {error: "", "result": "successful deletion"}
