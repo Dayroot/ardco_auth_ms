@@ -31,7 +31,7 @@ The functionalities of the REST API are described below.
     Content-Type: application/json
     Content-Length: 33
 
-    {"message": "successful creation"}
+    {error: "", "result": "successful creation"}
 
 ## User login
 
