@@ -17,6 +17,14 @@ class UserView(views.APIView):
     serializer = UserSerializer
     model = User
     
+    def setResult(self, type, content):
+        answer = {
+            "error": '',
+            "result":'',
+        }
+        answer[type] = content
+        return answer
+    
     #Gets an instance of the user object specified by id, if not found, returns a 404 status.
     def get_instance(self, data):
         instance = self.model.objects.filter(**data)
@@ -26,43 +34,57 @@ class UserView(views.APIView):
     def get(self,request, *args, **kwargs):
         instance = self.get_instance(kwargs)
         if len(instance) == 0:
-            return Response({'message': 'user not found'}, status = status.HTTP_404_NOT_FOUND)
-        instance_serializer = self.serializer(instance[0])
-        return Response(instance_serializer.data, status = status.HTTP_200_OK)
+            result = self.setResult('error', 'user not found')
+            return Response( result, status = status.HTTP_404_NOT_FOUND)
+        
+        mydata =self.serializer(instance[0]).data
+        result = self.setResult('result', mydata)
+        return Response(result, status = status.HTTP_200_OK)
     
     #Allows you to register a new user, if the username or email of the user is already registered, 
-    # it will return a message with the field that must be changed.
+    # it will return a error with the field that must be changed.
     def post(self, request, *args, **kwargs):
         username = {"username": request.data['username']}
         email = {"email": request.data['email']}
         
         if len(self.get_instance(username))!= 0 and len(self.get_instance(email)) != 0:
-            return Response({'message': 'the username and email entered are registered, please change them'}, status = status.HTTP_405_METHOD_NOT_ALLOWED)
+            result = self.setResult('error','the username and email entered are registered, please change them')
+            return Response(self.result, status = status.HTTP_405_METHOD_NOT_ALLOWED)
         
         elif len(self.get_instance(username)) != 0:
-            return Response({'message': 'the username entered is already in use'}, status = status.HTTP_405_METHOD_NOT_ALLOWED)
+            result = self.setResult('error','the username entered is already in use')
+            return Response(self.result, status = status.HTTP_405_METHOD_NOT_ALLOWED)
         
         elif len(self.get_instance(email)) != 0:
-            return Response({'message': 'the email entered is already in use'}, status = status.HTTP_405_METHOD_NOT_ALLOWED)
+            result = self.setResult('error','the email entered is already in use')
+            return Response(result, status = status.HTTP_405_METHOD_NOT_ALLOWED)
         
         serializer = self.serializer(data = request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save() 
-        return Response({'message': 'successful creation'}, status= status.HTTP_201_CREATED)
+        serializer.save()
+        result = self.setResult('result','successful creation')
+        return Response(result, status= status.HTTP_201_CREATED)
     
     #Update user data
     def put(self, request, *args, **kwargs):
         id = {"id": request.data.pop('id')}
         instance = self.get_instance(id)
+        if len(instance)== 0:
+            result = self.setResult('error', 'user not found')
+            return Response(self.result, status = status.HTTP_405_METHOD_NOT_ALLOWED)
+        
         serializer = self.serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
-        serializer.save()  
-        return Response({'message': 'successful update'}, status= status.HTTP_200_OK)
+        serializer.save()
+        result = self.setResult('result','successful update')
+        return Response(result, status= status.HTTP_200_OK)
     
     #Delete user data
     def delete(self, request, *args, **kwargs):
         instance = self.get_instance(kwargs)
         if len(instance)== 0:
-            return Response({'message': 'user not found'}, status = status.HTTP_405_METHOD_NOT_ALLOWED)
+            result = self.setResult('error', 'user not found')
+            return Response(self.result, status = status.HTTP_405_METHOD_NOT_ALLOWED)
         instance.delete()
-        return Response({'message': 'successful deletion'}, status= status.HTTP_200_OK)
+        result = self.setResult('result','successful deletion')
+        return Response(result, status= status.HTTP_200_OK)
