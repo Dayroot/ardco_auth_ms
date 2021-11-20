@@ -71,7 +71,7 @@ class UserView(views.APIView):
         instance = self.get_instance(id)
         if len(instance)== 0:
             result = self.setResult('error', 'user not found')
-            return Response(self.result, status = status.HTTP_405_METHOD_NOT_ALLOWED)
+            return Response(result, status = status.HTTP_405_METHOD_NOT_ALLOWED)
         
         serializer = self.serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
