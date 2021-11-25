@@ -11,6 +11,7 @@ from authApp.models import User
 
 #serializer
 from authApp.serializers import UserSerializer
+from authApp.serializers import UserTokenObtainPairSerializer
 
 class UserView(views.APIView):
     
@@ -46,14 +47,14 @@ class UserView(views.APIView):
     def post(self, request, *args, **kwargs):
         username = {"username": request.data['username']}
         email = {"email": request.data['email']}
-        
+    
         if len(self.get_instance(username))!= 0 and len(self.get_instance(email)) != 0:
-            result = self.setResult('error','the username and email entered are registered, please change them')
-            return Response(self.result, status = status.HTTP_405_METHOD_NOT_ALLOWED)
+            result = self.setResult('error','the username and email entered are registered')
+            return Response(result, status = status.HTTP_405_METHOD_NOT_ALLOWED)
         
         elif len(self.get_instance(username)) != 0:
             result = self.setResult('error','the username entered is already in use')
-            return Response(self.result, status = status.HTTP_405_METHOD_NOT_ALLOWED)
+            return Response(result, status = status.HTTP_405_METHOD_NOT_ALLOWED)
         
         elif len(self.get_instance(email)) != 0:
             result = self.setResult('error','the email entered is already in use')
@@ -62,7 +63,14 @@ class UserView(views.APIView):
         serializer = self.serializer(data = request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        result = self.setResult('result','successful creation')
+        
+        tokenData = {"username":request.data["username"], 
+                     "password":request.data["password"]}
+        
+        tokenSerializer = UserTokenObtainPairSerializer(data=tokenData)
+        tokenSerializer.is_valid(raise_exception=True)
+        
+        result = self.setResult('result',tokenSerializer.validated_data)
         return Response(result, status= status.HTTP_201_CREATED)
     
     #Update user data
@@ -84,7 +92,7 @@ class UserView(views.APIView):
         instance = self.get_instance(kwargs)
         if len(instance)== 0:
             result = self.setResult('error', 'user not found')
-            return Response(self.result, status = status.HTTP_405_METHOD_NOT_ALLOWED)
+            return Response(result, status = status.HTTP_405_METHOD_NOT_ALLOWED)
         instance.delete()
         result = self.setResult('result','successful deletion')
         return Response(result, status= status.HTTP_200_OK)
