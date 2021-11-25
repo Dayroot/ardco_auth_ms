@@ -30,7 +30,7 @@ class UserView(views.APIView):
     def get_instance(self, data):
         instance = self.model.objects.filter(**data)
         return instance
-    
+       
     #Returns the data of the user specified by id
     def get(self,request, *args, **kwargs):
         instance = self.get_instance(kwargs)
@@ -75,8 +75,7 @@ class UserView(views.APIView):
     
     #Update user data
     def put(self, request, *args, **kwargs):
-        id = {"id": request.data.pop('id')}
-        instance = self.get_instance(id)
+        instance = self.get_instance(kwargs)
         if len(instance)== 0:
             result = self.setResult('error', 'user not found')
             return Response(result, status = status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -84,7 +83,12 @@ class UserView(views.APIView):
         serializer = self.serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return self.get(request, args, id)
+        
+        updatedInstance = self.get_instance(kwargs)
+        newData =self.serializer(instance[0]).data
+        result = self.setResult('result', newData)
+        
+        return Response(result, status = status.HTTP_200_OK)
     
     #Delete user data
     def delete(self, request, *args, **kwargs):
