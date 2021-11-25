@@ -84,8 +84,7 @@ class UserView(views.APIView):
         serializer = self.serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        result = self.setResult('result',serializer.validated_data)
-        return Response(result, status= status.HTTP_200_OK)
+        return self.get(request, args, id)
     
     #Delete user data
     def delete(self, request, *args, **kwargs):
