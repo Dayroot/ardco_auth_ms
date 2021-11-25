@@ -84,7 +84,7 @@ class UserView(views.APIView):
         serializer = self.serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        result = self.setResult('result','successful update')
+        result = self.setResult('result',serializer.validated_data)
         return Response(result, status= status.HTTP_200_OK)
     
     #Delete user data
