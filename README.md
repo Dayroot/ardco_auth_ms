@@ -11,7 +11,7 @@ The functionalities of the REST API are described below.
 
 `POST /user/`
 
-    'Accept: application/json' http://localhost:8000/user/
+    'Accept: application/json' https://ardco-auth-ms.herokuapp.com/user/
 	body: {
 		"username": "pepito",
 		"fullname": "fulanito",
@@ -39,7 +39,7 @@ The functionalities of the REST API are described below.
 
 `POST /login/`
 
-    'Accept: application/json' http://localhost:8000/login/
+    'Accept: application/json' https://ardco-auth-ms.herokuapp.com/login/
 	body:{
 		"username": "pepito",
 		"password": "1234"
@@ -66,7 +66,7 @@ The functionalities of the REST API are described below.
 
 `POST /verifyToken/`
 
-     'Accept: application/json' http://localhost:8000/verifyToken/
+     'Accept: application/json' https://ardco-auth-ms.herokuapp.com/verifyToken/
 	 body: {
     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM3NDQyMTc0LCJpYXQiOjE2Mzc0Mzg1NzQsImp0aSI6ImQ1NmYwYWY0YTcxODQ2NGQ5ZDI3ZDhiZjE4NmMyMDQzIiwidXNlcl9pZCI6MX0.ua3qtgKZeIlyFjculh03axxsdHnGcjZbvCEuYWaRUhc"
 	}
@@ -88,7 +88,7 @@ The functionalities of the REST API are described below.
 
 `POST /refresh/`
 
-     'Accept: application/json' http://localhost:8000/refresh/
+     'Accept: application/json' https://ardco-auth-ms.herokuapp.com/refresh/
 	 body: {          
     "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzNzUyNTk2NiwiaWF0IjoxNjM3NDM5NTY2LCJqdGkiOiI0NWE2ZDY1MDcwNjg0ZmI3ODVjNmJiZDU4NTliMmI2ZiIsInVzZXJfaWQiOjF9.hLsMHl_i8XGMfSpApRJzUMvrn8L5NFYvAhULaC4ECCk"
 	}
@@ -112,7 +112,7 @@ The functionalities of the REST API are described below.
 
 `GET /user/id`
 
-     'Accept: application/json' http://localhost:8000/user/1
+     'Accept: application/json' https://ardco-auth-ms.herokuapp.com/user/1
 
 ### Response
 
@@ -141,7 +141,7 @@ The functionalities of the REST API are described below.
 
 `PUT /user/:id`
 
-    'Accept: application/json' http://localhost:8000/user/1
+    'Accept: application/json' https://ardco-auth-ms.herokuapp.com/user/1
 	body: {
 		"address": "Av 52 sur Calle 6# 21-18"
 	      }
@@ -156,7 +156,7 @@ The functionalities of the REST API are described below.
     Content-Length: 31
     
     {
-      	"error": "", 
+      	 "error": "", 
 	"result":
 		"id": 1,
 		"username": "pepito",
@@ -174,7 +174,7 @@ The functionalities of the REST API are described below.
 
 `DELETE /user/id`
 
-    'Accept: application/json' http://localhost:8000/user/1
+    'Accept: application/json' https://ardco-auth-ms.herokuapp.com/user/1
 
 ### Response
 
