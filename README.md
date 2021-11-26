@@ -31,7 +31,7 @@ The functionalities of the REST API are described below.
     Content-Type: application/json
     Content-Length: 33
 
-    {error: "", "result": "successful creation"}
+    {"error": "", "result": "successful creation"}
 
 ## User login
 
@@ -122,7 +122,8 @@ The functionalities of the REST API are described below.
     Connection: close
     Content-Type: application/json
     Content-Length: 205
-	{error: "", 
+	{
+	"error": "", 
 	"result":
 		"id": 1,
 		"username": "pepito",
@@ -140,11 +141,10 @@ The functionalities of the REST API are described below.
 
 `PUT /user/:id`
 
-    'Accept: application/json' http://localhost:8000/user/
+    'Accept: application/json' http://localhost:8000/user/1
 	body: {
-		"id": 1,
 		"address": "Av 52 sur Calle 6# 21-18"
-		}
+	      }
 
 ### Response
 
@@ -154,8 +154,19 @@ The functionalities of the REST API are described below.
     Connection: close
     Content-Type: application/json
     Content-Length: 31
-
-    {error: "", "result": "successful update"}
+    
+    {
+      	"error": "", 
+	"result":
+		"id": 1,
+		"username": "pepito",
+		"fullname": "fulanito",
+		"datebirth": "2000-01-22",
+		"email": "fulanito@gmail.com",
+		"identification": "906209640",
+		"phone_number": "3176740235",
+		"address": "Av 52 sur Calle 6# 21-18"
+	}
 
 ## Delete user data
 
@@ -174,4 +185,4 @@ The functionalities of the REST API are described below.
     Content-Type: application/json
     Content-Length: 33
 
-    {error: "", "result": "successful deletion"}
+    {"error": "", "result": "successful deletion"}
