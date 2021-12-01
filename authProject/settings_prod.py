@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
-
+import django_heroku
+import json
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,9 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3t!no_(p!h*05h#3_v2sx(p!3fcov7xhpa$6^hox&#*zfunu&k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ardco-api-gateway.herokuapp.com']
+CORS_ALLOWED_ORIGINS = [
+    "https://ardco-api-gateway.herokuapp.com",
+]
 
 
 # Application definition
@@ -39,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'authApp'
+    'authApp',
+    'corsheaders',
 ]
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
@@ -60,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -94,15 +100,18 @@ WSGI_APPLICATION = 'authProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+with open('credentials_prod.json', 'r') as credentials_file:
+    credentials = json.load(credentials_file)
+    
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd8cmvsfm7u336d',
-        'USER': 'znujrrtndkmhgc',
-        'PASSWORD': 'cb090aa6a0f49830c30e862db1e981945d8f2e386cb8df5af0e6817238e0b36e',
-        'HOST': 'ec2-52-54-237-144.compute-1.amazonaws.com',
-        'PORT':'5432',
-    }
+        'ENGINE'   : 'django.db.backends.postgresql_psycopg2',
+        'NAME'     : credentials['database'],
+        'USER'     : credentials['username'],
+        'PASSWORD' : credentials['password'],
+        'HOST'     : credentials['host'],
+        'PORT'     : credentials['port'],
+    }   
 }
 
 
@@ -149,5 +158,4 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-import django_heroku
 django_heroku.settings(locals())
